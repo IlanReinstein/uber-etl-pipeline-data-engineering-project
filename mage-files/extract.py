@@ -1,5 +1,6 @@
 import io
-import pandas as pd
+import polars
+import polars as pl
 import requests
 if 'data_loader' not in globals():
     from mage_ai.data_preparation.decorators import data_loader
@@ -8,14 +9,14 @@ if 'test' not in globals():
 
 
 @data_loader
-def load_data_from_api(*args, **kwargs):
+def load_data_from_api(*args, **kwargs) -> polars.DataFrame:
     """
     Template for loading data from API
     """
-    url = 'https://storage.googleapis.com/uber-data-engineering-project-darshil/uber_data.csv'
+    url = 'https://storage.googleapis.com/uber_project_ir/uber_data.csv'
     response = requests.get(url)
 
-    return pd.read_csv(io.StringIO(response.text), sep=',')
+    return pl.read_csv(io.StringIO(response.text))
 
 
 @test

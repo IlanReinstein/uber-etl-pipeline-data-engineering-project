@@ -1,4 +1,4 @@
-from mage_ai.data_preparation.repo_manager import get_repo_path
+from mage_ai.settings.repo import get_repo_path
 from mage_ai.io.bigquery import BigQuery
 from mage_ai.io.config import ConfigFileLoader
 from pandas import DataFrame
@@ -9,20 +9,19 @@ if 'data_exporter' not in globals():
 
 
 @data_exporter
-def export_data_to_big_query(data, **kwargs) -> None:
+def export_data_to_big_query(data_dict: dict, **kwargs) -> None:
     """
     Template for exporting data to a BigQuery warehouse.
     Specify your configuration settings in 'io_config.yaml'.
 
     Docs: https://docs.mage.ai/design/data-loading#bigquery
-
-    
     """
+    
     config_path = path.join(get_repo_path(), 'io_config.yaml')
     config_profile = 'default'
 
-    for key, value in data.items():
-        table_id = 'data-with-darshil.uber_data_engineering_yt.{}'.format(key)
+    for key, value in data_dict.items():
+        table_id = f"caramel-banner-399422.uber_data_eng.{key}"
         BigQuery.with_config(ConfigFileLoader(config_path, config_profile)).export(
             DataFrame(value),
             table_id,
